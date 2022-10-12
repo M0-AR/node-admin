@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
 import { getManager } from "typeorm";
 import { RegisterValidation } from "../validation/register.validation";
-import {User} from "../entity/user.entity"
+import { User } from "../entity/user.entity";
 import bcyptjs from "bcryptjs";
+import { sign } from "jsonwebtoken";
 
 export const Register = async (req: Request, res: Response) => {
   const body = req.body;
@@ -21,11 +22,11 @@ export const Register = async (req: Request, res: Response) => {
 
   const repository = getManager().getRepository(User);
 
-  const {password, ...user} = await repository.save({
+  const { password, ...user } = await repository.save({
     first_name: body.first_name,
     last_name: body.last_name,
     email: body.email,
-    password: await bcyptjs.hash(body.password, 10)
+    password: await bcyptjs.hash(body.password, 10),
   });
 
   res.send(user);
@@ -34,21 +35,28 @@ export const Register = async (req: Request, res: Response) => {
 export const Login = async (req: Request, res: Response) => {
   const repository = getManager().getRepository(User);
 
-  const user = await repository.findOne({where: {email: req.body.email}});
+  const user = await repository.findOne({ where: { email: req.body.email } });
 
   if (!user) {
     return res.status(400).send({
-      message: 'invalid credentials!'
-    })
+      message: "invalid credentials!",
+    });
   }
 
-  if(!await bcyptjs.compare(req.body.password, user.password)) {
+  if (!(await bcyptjs.compare(req.body.password, user.password))) {
     return res.status(400).send({
-      message: 'invalid credentials!'
-    })
+      message: "invalid credentials!",
+    });
   }
 
-  const {password, ...data} = user;
+  const token = sign({ id: user.id }, "secret");
 
-  res.send(data);
-}
+  res.cookie("jwt", token, {
+    httpOnly: true,
+    maxAge: 24 * 60 * 60 * 1000, // 1day
+  });
+
+  res.send({
+    message: "success",
+  });
+};
