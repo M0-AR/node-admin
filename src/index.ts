@@ -1,4 +1,6 @@
-import express, { Request, Response } from "express";
+require('dotenv').config();
+
+import express from "express";
 import cors from "cors";
 import { routes } from "./routes";
 import { createConnection } from "typeorm";

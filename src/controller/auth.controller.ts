@@ -49,7 +49,13 @@ export const Login = async (req: Request, res: Response) => {
     });
   }
 
-  const token = sign({ id: user.id }, "secret");
+  if (!process.env.SECRET_KEY) {
+    return res.status(400).send({
+      message: "invalid credentials!",
+    });
+  }
+
+  const token = sign({ id: user.id }, process.env.SECRET_KEY);
 
   res.cookie("jwt", token, {
     httpOnly: true,
@@ -65,7 +71,11 @@ export const AuthenticatedUser = async (req: Request, res: Response) => {
   try {
     const jwt = req.cookies["jwt"];
 
-    const payload: any = verify(jwt, "secret");
+    if (!process.env.SECRET_KEY) {
+      throw new Error("SECRET_KEY environment variable is not set");
+    }
+
+    const payload: any = verify(jwt, process.env.SECRET_KEY);
 
     if (!payload) {
       return res.status(401).send({
