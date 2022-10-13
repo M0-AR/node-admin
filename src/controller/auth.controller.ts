@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getManager, Repository } from "typeorm";
+import { getManager} from "typeorm";
 import { RegisterValidation } from "../validation/register.validation";
 import { User } from "../entity/user.entity";
 import bcyptjs from "bcryptjs";
@@ -68,36 +68,9 @@ export const Login = async (req: Request, res: Response) => {
 };
 
 export const AuthenticatedUser = async (req: Request, res: Response) => {
-  try {
-    const jwt = req.cookies["jwt"];
+    const {password, ...user}= req.user;
 
-    if (!process.env.SECRET_KEY) {
-      throw new Error("SECRET_KEY environment variable is not set");
-    }
-
-    const payload: any = verify(jwt, process.env.SECRET_KEY);
-
-    if (!payload) {
-      return res.status(401).send({
-        message: "unauthenticated",
-      });
-    }
-
-    const repository = getManager().getRepository(User);
-
-    const user = await repository.findOne({ where: { id: payload.id } });
-
-    res.send({
-      id: user?.id,
-      first_name: user?.first_name,
-      last_name: user?.last_name,
-      email: user?.email,
-    });
-  } catch (e) {
-    return res.status(401).send({
-      message: "unauthenticated",
-    });
-  }
+    res.send(user);
 };
 
 export const Logout = async (req: Request, res: Response) => {
