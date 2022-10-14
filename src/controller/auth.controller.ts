@@ -88,7 +88,7 @@ export const UpdateInfo = async (req: Request, res: Response) => {
 
   await repository.update(user.id, req.body);
 
-  const {password, ...data} = await repository.findOneBy(user.id) ?? {};
+  const { password, ...data } = (await repository.findOneBy(user.id)) ?? {};
 
   res.send(data);
 };
@@ -104,10 +104,10 @@ export const UpdatePassword = async (req: Request, res: Response) => {
 
   const repository = getManager().getRepository(User);
   await repository.update(user.id, {
-    password: await bcyptjs.hash(req.body.password, 10)
+    password: await bcyptjs.hash(req.body.password, 10),
   });
 
-  const {password, ...data} = user;
+  const { password, ...data } = user;
 
   res.send(data);
 };
