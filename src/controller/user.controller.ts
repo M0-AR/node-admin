@@ -6,7 +6,9 @@ import bcyptjs from "bcryptjs";
 export const Users = async (req: Request, res: Response) => {
   const repository = getManager().getRepository(User);
 
-  const users = await repository.find();
+  const users = await repository.find({
+    relations: ["role"],
+  });
 
   res.send(
     users.map((u) => {
@@ -26,6 +28,9 @@ export const CreateUser = async (req: Request, res: Response) => {
   const { password, ...user } = await repository.save({
     ...body,
     password: hashedPassword,
+    role: {
+      id: role_id,
+    },
   });
 
   res.status(201).send(user);
@@ -34,7 +39,10 @@ export const CreateUser = async (req: Request, res: Response) => {
 export const GetUser = async (req: Request, res: Response) => {
   const repository = getManager().getRepository(User);
 
-  const { password, ...user } = (await repository.findOneBy(req.params)) ?? {
+  const { password, ...user } = (await repository.findOne({
+    where: { id: Number(req.params.id) },
+    relations: ["role"],
+  })) ?? {
     user: "not found",
   };
 
@@ -46,9 +54,17 @@ export const UpdateUser = async (req: Request, res: Response) => {
 
   const repository = getManager().getRepository(User);
 
-  await repository.update(req.params, body);
+  await repository.update(req.params, {
+    ...body,
+    role: {
+      id: role_id
+    }
+  });
 
-  const { password, ...user } = (await repository.findOneBy(req.params)) ?? {
+  const { password, ...user } = (await repository.findOne({
+    where: { id: Number(req.params.id) },
+    relations: ["role"],
+  })) ?? {
     user: "not found",
   };
 
