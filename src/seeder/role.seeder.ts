@@ -49,5 +49,5 @@ createConnection().then(async connection => {
     permissions
   });
 
-  process.exit(0);
+  // process.exit(0);
 });
