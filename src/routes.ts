@@ -1,4 +1,4 @@
-import { Router } from "express";
+import express, { Router } from "express";
 import {
   Register,
   Login,
@@ -16,10 +16,21 @@ import {
 } from "./controller/user.controller";
 import { AuthMiddleware } from "./middleware/auth.middleware";
 import { Permissions } from "./controller/permission.controller";
-import { CreateRole, DeleteRole, GetRole, Roles, UpdateRole } from "./controller/role.controller";
-import { CreateProduct, DeleteProduct, GetProduct, Products, UpdateProduct } from "./controller/product.controller";
+import {
+  CreateRole,
+  DeleteRole,
+  GetRole,
+  Roles,
+  UpdateRole,
+} from "./controller/role.controller";
+import {
+  CreateProduct,
+  DeleteProduct,
+  GetProduct,
+  Products,
+  UpdateProduct,
+} from "./controller/product.controller";
 import { Upload } from "./controller/image.controller";
-
 
 export const routes = (router: Router) => {
   router.post("/api/register", Register);
@@ -49,5 +60,6 @@ export const routes = (router: Router) => {
   router.put("/api/products/:id", AuthMiddleware, UpdateProduct);
   router.delete("/api/products/:id", AuthMiddleware, DeleteProduct);
 
-  router.post('/api/upload', AuthMiddleware, Upload);
+  router.post("/api/upload", AuthMiddleware, Upload);
+  router.use("/api/uploads", express.static('./uploads'));;
 };
