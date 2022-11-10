@@ -31,6 +31,7 @@ import {
   UpdateProduct,
 } from "./controller/product.controller";
 import { Upload } from "./controller/image.controller";
+import { Orders } from "./controller/order.controller";
 
 export const routes = (router: Router) => {
   router.post("/api/register", Register);
@@ -62,4 +63,6 @@ export const routes = (router: Router) => {
 
   router.post("/api/upload", AuthMiddleware, Upload);
   router.use("/api/uploads", express.static('./uploads'));;
+
+  router.get('/api/orders', AuthMiddleware, Orders);
 };
