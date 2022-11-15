@@ -21,18 +21,21 @@ export class Order {
   @Column()
   email: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({nullable: true})
   created_at: string;
 
-   @OneToMany(() => OrderItem, orderItem => orderItem.order)
-   order_items: OrderItem[];
+  @OneToMany(() => OrderItem, (orderItem) => orderItem.order)
+  order_items: OrderItem[];
 
   get name(): string {
     return `${this.first_name} ${this.last_name}`;
   }
 
   get total(): number {
-    return this.order_items.reduce((sum, item) => sum + item.quantity * item.price, 0);
+    return this.order_items.reduce(
+      (sum, item) => sum + item.quantity * item.price,
+      0
+    );
   }
 }
 
