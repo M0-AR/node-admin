@@ -21,7 +21,7 @@ export class Order {
   @Column()
   email: string;
 
-  @CreateDateColumn({nullable: true})
+  @CreateDateColumn()
   created_at: string;
 
   @OneToMany(() => OrderItem, (orderItem) => orderItem.order)

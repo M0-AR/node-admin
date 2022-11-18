@@ -12,7 +12,7 @@ createConnection().then(async (connection) => {
       first_name: faker.name.firstName(),
       last_name: faker.name.lastName(),
       email: faker.internet.email(),
-      created_at: faker.date.past(2).toDateString()
+      created_at: faker.date.past(2).toISOString()
     });
 
     const random = Math.floor(1 + Math.random() * (5 - 1 + 1)); // 10-100
@@ -26,3 +26,9 @@ createConnection().then(async (connection) => {
     }
   }
 });
+
+function randomDate(start, end) {
+  return new Date(
+    start.getTime() + Math.random() * (end.getTime() - start.getTime())
+  );
+}
