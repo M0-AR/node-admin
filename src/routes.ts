@@ -32,6 +32,7 @@ import {
 } from "./controller/product.controller";
 import { Upload } from "./controller/image.controller";
 import { Chart, Export, Orders } from "./controller/order.controller";
+import { PermissionMiddleware } from "./middleware/permission.middleware";
 
 export const routes = (router: Router) => {
   router.post("/api/register", Register);
@@ -55,11 +56,11 @@ export const routes = (router: Router) => {
   router.put("/api/roles/:id", AuthMiddleware, UpdateRole);
   router.delete("/api/roles/:id", AuthMiddleware, DeleteRole);
 
-  router.get("/api/products", AuthMiddleware, Products);
-  router.post("/api/products", AuthMiddleware, CreateProduct);
-  router.get("/api/products/:id", AuthMiddleware, GetProduct);
-  router.put("/api/products/:id", AuthMiddleware, UpdateProduct);
-  router.delete("/api/products/:id", AuthMiddleware, DeleteProduct);
+  router.get("/api/products", AuthMiddleware, PermissionMiddleware('products'), Products);
+  router.post("/api/products", AuthMiddleware, PermissionMiddleware('products'), CreateProduct);
+  router.get("/api/products/:id", AuthMiddleware, PermissionMiddleware('products'), GetProduct);
+  router.put("/api/products/:id", AuthMiddleware, PermissionMiddleware('products'), UpdateProduct);
+  router.delete("/api/products/:id", AuthMiddleware, PermissionMiddleware('products'), DeleteProduct);
 
   router.post("/api/upload", AuthMiddleware, Upload);
   router.use("/api/uploads", express.static('./uploads'));;
