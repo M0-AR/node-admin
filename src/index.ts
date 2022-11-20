@@ -21,7 +21,7 @@ createConnection()
 
     routes(app);
 
-    app.listen(8000, () => {
+    app.listen(800, () => {
       console.log("listening to port 8000");
     });
   })

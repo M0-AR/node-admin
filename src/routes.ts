@@ -42,11 +42,36 @@ export const routes = (router: Router) => {
   router.put("/api/users/info", AuthMiddleware, UpdateInfo);
   router.put("/api/users/password", AuthMiddleware, UpdatePassword);
 
-  router.get("/api/users", AuthMiddleware, Users);
-  router.post("/api/users", AuthMiddleware, CreateUser);
-  router.get("/api/users/:id", AuthMiddleware, GetUser);
-  router.put("/api/users/:id", AuthMiddleware, UpdateUser);
-  router.delete("/api/users/:id", AuthMiddleware, DeleteUser);
+  router.get(
+    "/api/users",
+    AuthMiddleware,
+    PermissionMiddleware("products"),
+    Users
+  );
+  router.post(
+    "/api/users",
+    AuthMiddleware,
+    PermissionMiddleware("products"),
+    CreateUser
+  );
+  router.get(
+    "/api/users/:id",
+    AuthMiddleware,
+    PermissionMiddleware("products"),
+    GetUser
+  );
+  router.put(
+    "/api/users/:id",
+    AuthMiddleware,
+    PermissionMiddleware("products"),
+    UpdateUser
+  );
+  router.delete(
+    "/api/users/:id",
+    AuthMiddleware,
+    PermissionMiddleware("products"),
+    DeleteUser
+  );
 
   router.get("/api/permissions", AuthMiddleware, Permissions);
 
@@ -56,16 +81,41 @@ export const routes = (router: Router) => {
   router.put("/api/roles/:id", AuthMiddleware, UpdateRole);
   router.delete("/api/roles/:id", AuthMiddleware, DeleteRole);
 
-  router.get("/api/products", AuthMiddleware, PermissionMiddleware('products'), Products);
-  router.post("/api/products", AuthMiddleware, PermissionMiddleware('products'), CreateProduct);
-  router.get("/api/products/:id", AuthMiddleware, PermissionMiddleware('products'), GetProduct);
-  router.put("/api/products/:id", AuthMiddleware, PermissionMiddleware('products'), UpdateProduct);
-  router.delete("/api/products/:id", AuthMiddleware, PermissionMiddleware('products'), DeleteProduct);
+  router.get(
+    "/api/products",
+    AuthMiddleware,
+    PermissionMiddleware("products"),
+    Products
+  );
+  router.post(
+    "/api/products",
+    AuthMiddleware,
+    PermissionMiddleware("products"),
+    CreateProduct
+  );
+  router.get(
+    "/api/products/:id",
+    AuthMiddleware,
+    PermissionMiddleware("products"),
+    GetProduct
+  );
+  router.put(
+    "/api/products/:id",
+    AuthMiddleware,
+    PermissionMiddleware("products"),
+    UpdateProduct
+  );
+  router.delete(
+    "/api/products/:id",
+    AuthMiddleware,
+    PermissionMiddleware("products"),
+    DeleteProduct
+  );
 
   router.post("/api/upload", AuthMiddleware, Upload);
-  router.use("/api/uploads", express.static('./uploads'));;
+  router.use("/api/uploads", express.static("./uploads"));
 
-  router.get('/api/orders', AuthMiddleware, Orders);
-  router.post('/api/export', AuthMiddleware, Export);
-  router.get('/api/chart', AuthMiddleware, Chart);
+  router.get("/api/orders", AuthMiddleware, Orders);
+  router.post("/api/export", AuthMiddleware, Export);
+  router.get("/api/chart", AuthMiddleware, Chart);
 };
