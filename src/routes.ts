@@ -75,11 +75,36 @@ export const routes = (router: Router) => {
 
   router.get("/api/permissions", AuthMiddleware, Permissions);
 
-  router.get("/api/roles", AuthMiddleware, Roles);
-  router.post("/api/roles", AuthMiddleware, CreateRole);
-  router.get("/api/roles/:id", AuthMiddleware, GetRole);
-  router.put("/api/roles/:id", AuthMiddleware, UpdateRole);
-  router.delete("/api/roles/:id", AuthMiddleware, DeleteRole);
+  router.get(
+    "/api/roles",
+    AuthMiddleware,
+    PermissionMiddleware("roles"),
+    Roles
+  );
+  router.post(
+    "/api/roles",
+    AuthMiddleware,
+    PermissionMiddleware("roles"),
+    CreateRole
+  );
+  router.get(
+    "/api/roles/:id",
+    AuthMiddleware,
+    PermissionMiddleware("roles"),
+    GetRole
+  );
+  router.put(
+    "/api/roles/:id",
+    AuthMiddleware,
+    PermissionMiddleware("roles"),
+    UpdateRole
+  );
+  router.delete(
+    "/api/roles/:id",
+    AuthMiddleware,
+    PermissionMiddleware("roles"),
+    DeleteRole
+  );
 
   router.get(
     "/api/products",

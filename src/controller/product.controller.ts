@@ -10,16 +10,16 @@ export const Products = async (req: Request, res: Response) => {
 
   const [data, total] = await repository.findAndCount({
     take,
-    skip: (currentPage - 1) * take
+    skip: (currentPage - 1) * take,
   });
 
   res.send({
     data,
     meta: {
-        total,
-        currentPage,
-        last_page: Math.ceil(total / take)
-    }
+      total,
+      currentPage,
+      last_page: Math.ceil(total / take),
+    },
   });
 };
 

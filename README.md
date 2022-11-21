@@ -1,12 +1,17 @@
 
-# To start the application run 'npm start'
-# To create fake role's data 'npm run roles:seed'
+### To start the application run 'npm start'
 
-# To remove the data from those tables 
-`SET FOREIGN_KEY_CHECKS = 0;
+### To create fake role's data 'npm run roles:seed'
+
+### To remove the data from those tables 
+`
+SET FOREIGN_KEY_CHECKS = 0;
 
 TRUNCATE `node_admin`.`role_permissions`;
 TRUNCATE `node_admin`.`permission`;
 TRUNCATE `node_admin`.`role`;
 
-SET FOREIGN_KEY_CHECKS = 1;`
+SET FOREIGN_KEY_CHECKS = 1;
+`
+
+### To see api end point please look at Node-admin.postman
