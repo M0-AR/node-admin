@@ -22,14 +22,24 @@ export const Register = async (req: Request, res: Response) => {
 
   const repository = getManager().getRepository(User);
 
-  const { password, ...user } = await repository.save({
-    first_name: body.first_name,
-    last_name: body.last_name,
+  const emailExists = await repository.findOneBy({
     email: body.email,
-    password: await bcyptjs.hash(body.password, 10),
   });
 
-  res.send(user);
+  if (emailExists) {
+      return res.status(400).send({
+        message: "Email alraedy exist!",
+      });
+  }
+
+    const { password, ...user } = await repository.save({
+      first_name: body.first_name,
+      last_name: body.last_name,
+      email: body.email,
+      password: await bcyptjs.hash(body.password, 10),
+    });
+
+    res.send(user);
 };
 
 export const Login = async (req: Request, res: Response) => {
